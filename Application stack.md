@@ -1,15 +1,51 @@
-# Azure Google — Secure Hybrid Application Platform
+ Application Stack
 
-## Overview
 
-This project demonstrates a secure hybrid application architecture connecting **Google Cloud Platform (GCP)** and **Microsoft Azure**.
-
-The concept brings together infrastructure, networking, security, application delivery, observability, and cross-cloud database connectivity into one cohesive platform.
-
-It is intended to demonstrate **practical infrastructure and cloud engineering knowledge developed and consolidated across multiple projects into a single architectural concept**. It should not be interpreted as a statement of a specific number of years of professional experience.
-
-## Architecture
-
+┌─────────────────────────────────────┐
+│            User / Client            │
+└──────────────────┬──────────────────┘
+                   │ HTTP
+                   ▼
+┌─────────────────────────────────────┐
+│          Nginx — Port 80            │
+│        Reverse Proxy / Web Tier      │
+└──────────────────┬──────────────────┘
+                   │ HTTP
+                   ▼
+┌─────────────────────────────────────┐
+│     Gunicorn — Port 8080            │
+│        Python WSGI Server           │
+│          2 Workers                  │
+└──────────────────┬──────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────┐
+│       CNT Web Application            │
+│          Python / Flask              │
+└──────────────────┬──────────────────┘
+                   │ TCP 1433
+                   │ Private Route
+                   ▼
+┌─────────────────────────────────────┐
+│          GCP VPC / VPN              │
+│          10.20.0.0/16               │
+└──────────────────┬──────────────────┘
+                   │ HA VPN / IPsec
+                   ▼
+┌─────────────────────────────────────┐
+│          Azure VNet                 │
+│          10.10.0.0/16               │
+│                                     │
+│   Private DNS → Private Endpoint    │
+└──────────────────┬──────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────┐
+│          Azure SQL Database         │
+│       Private Endpoint              │
+│          10.10.3.4:1433             │
+└─────────────────────────────────────┘
+ 
 The platform consists of:
 
 - **GCP Compute Engine** hosting the CNT Web Application
