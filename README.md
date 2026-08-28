@@ -1,4 +1,4 @@
-# Azure GCP — Secure Hybrid Application Platform
+# Azure Google — Secure Hybrid Application Platform
 
 ## Overview
 
