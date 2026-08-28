@@ -1,4 +1,6 @@
- Application Stack
+ Application Stack 
+
+ Diagram and Working methodologies (In Detailed)
 
 
 ┌─────────────────────────────────────┐
